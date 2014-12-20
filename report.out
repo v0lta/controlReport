@@ -1,5 +1,0 @@
-\BOOKMARK [0][]{chapter.1}{1 Introduction}{}% 1
-\BOOKMARK [0][]{chapter.2}{2 Simulation}{}% 2
-\BOOKMARK [1][-]{section.2.1}{2.1 LQR Control with knowledge of the full state vector}{chapter.2}% 3
-\BOOKMARK [1][-]{section.2.2}{2.2 Concluding Simulations with filter and differentiator}{chapter.2}% 4
-\BOOKMARK [1][-]{section.2.3}{2.3 Tests of the controller on the real setup}{chapter.2}% 5
