@@ -98,7 +98,7 @@ As stated earlier we are using LQR-Control in this project. To compute the gain 
 \begin{equation}
 J = \int(\mathbf{x}^T Q \mathbf{x} + \mathbf{u}^T R \mathbf{u})dt.
 \end{equation}
-Initial but not optimal Q and R where given. \marginpar{Q = diag([350 1500 3 0.5]) for R = 10.} The $Q$ matrix gives weight to the different elements of the state vector. In our case hub position, arm position, angular hub and angular arm velocity. The R matrix, in our case a scalar makes the input more expensive. Our goals for tuning the controller are to achieve a satisfactory tracking for the hub angle $\theta$ without overshoot, while keeping the movement of the arm $\alpha$ as low as possible. At the same time we want to avoid actuator saturation. These are obviously conflicting objectives. So a good compromise is required. Figure~\ref{fig:stepResponse} shows the performance of the initially provided weighting parameters. From the tracking point of view the performance is not bad, however the input signal exceeds 5 Volts, which will lead to actuator saturation if applied to the real plant. We chose the following weighting matrix to fix this problem:
+Initial but not optimal Q and R where given. \marginpar{Q = diag([350 1500 3 0.5]) for R = 10.} The $Q$ matrix gives weight to the different elements of the state vector. In our case hub position, arm position, angular hub and angular arm velocity. The R matrix, in our case a scalar makes the input more expensive. Our goals for tuning the controller are to achieve a satisfactory tracking for the hub angle $\theta$ without overshoot, while keeping the movement of the arm $\alpha$ as low as possible. At the same time we want to avoid actuator saturation. These are obviously conflicting objectives. So a good compromise is required. Figure~\ref{fig:stepResponse} shows the performance of the initially provided weighting parameters. From the tracking point of view the performance is not bad, however the input signal almost exceeds 5 Volts, which will might lead to actuator saturation if applied to the real plant. We chose the following weighting matrix to fix this problem:
 \begin{equation}
 \begin{pmatrix}
 500 &		&	&	\\
@@ -112,9 +112,9 @@ With the input weight $R = 30$. We increased the weight on the inputs to prevent
 
 \begin{figure}
 %\input{images/orgFullState.tex}
-\includegraphics[scale=0.4]{images/orgFullState.pdf}
-\includegraphics[scale=0.4]{images/optFullState.pdf}
-\caption{Simulation results for the original weighting parameters left and for the improved weighting parameters right.}
+\includegraphics[scale=0.46]{images/orgFullState.pdf}
+\includegraphics[scale=0.46]{images/optFullState.pdf}
+\caption{Simulation results for the original weighting parameters left and for the improved weighting parameters right. Plant input is given in Volt [V]. Plant output and references are given in radians [rad].}
 \label{fig:stepResponse}
 \end{figure}
 
@@ -127,20 +127,30 @@ With the input weight $R = 30$. We increased the weight on the inputs to prevent
 
 
 
-\section{Tests of the controller on the real setup}
+\chapter{Tests of the controller on the real setup}
 
 \begin{figure} \label{realtimeSimDiagram}
   \centering
-  \includegraphics[scale=0.6]{images/realtimeSimDiagram}
+  \includegraphics[scale=0.4]{images/realtimeSimDiagram}
   \caption{Real-time Simulink diagram} 
 \end{figure}
 
-In figure $\eqref{realtimeSimDiagram}$ we see the real-time Simulink diagram that we used in the lab for the real setup. The "Analog Inputs" block gives the measurements of the sensors (they are updated each 5 ms) in radians for the angles of the hub and the arm. Additionally this block has two special outputs, "Display[volts]" and "Display[Eng]", which are used for visualization purposes. These two outputs are connected to a set of displays in order to provide a local visual measure of the process variables. 
+In figure $\eqref{realtimeSimDiagram}$ we see the real-time Simulink diagram that we used in the lab to run our experiments on the real setup. The "Analog Input" block sends measurements of the sensors into the template. Each sensor reading is updated with a sampling time of 5 ms, in radians for the angles of the hub and arm. Additionally this block has two special outputs, "Display[volts]" and "Display[Eng]", which are used for visualization purposes. These two outputs are connected to a set of displays in order to provide a local visual measure of the process variables. 
 
-The "Analog Output" block allows the controller to send a voltage signal to the motor of the hub. At the input of this block there is an on-off switch. This switch allows you to switch on or switch off the motor. We included a saturator in our diagram just before the signal goes in to the "Analog Output" block because the output voltage is limited from $-5V$ to $5V$. The saturator settings in our diagram are set accordingly. You can also see a sin wave, a step input and a zero input. These are used to represent a reference signal for the output. The sine wave or the step input is the reference for $\theta_{desired}$ and the zero block are 3 signals equals to zero that represent the reference for $\alpha, \dot{\theta}$ and $\dot{\alpha}$.
+The "Analog Output" block allows the controller to send a voltage signal to the motor of the hub. At the input of this block there is an on-off switch. This switch allows the user to switch the motor on or off. We included a saturator in our diagram just before the signal goes in to the "Analog Output" to limit the control input within $-5V$ and $5V$. The saturation settings of the block in our diagram are set accordingly. We also included a sine wave, a step input and a zero input. These two block are used as a reference for $\theta_{desired}$. The zero block contains 3 signals equal to zero that represent the references for $\alpha, \dot{\theta}$ and $\dot{\alpha}$.
 
 
-
+\section{Setpoint tracking}
+\begin{figure}
+%If time later use these and adjust size in .tex file.
+%\input{images/optimizedStepLab.tex}
+%\input{images/optimizedSineLab.tex}
+\includegraphics[scale = 0.46]{images/optimizedStepLab.pdf}
+\includegraphics[scale = 0.46]{images/optimizedSineLab.pdf}
+\caption{Setpoint tracking test results. References and plant outputs are given in degree [$\;^\circ$]. Plant input voltages are given in volts [V].}
+\label{fig:setPoint}
+\end{figure}
+Using the controller we tuned during the simulation of our plant we started our experiments with some simple reference tracking experiments.\marginpar{Recall that we had the tuned controller: Q = diag([500 1000 3 10]) with R = 30.} The results are shown in figure~\ref{fig:setPoint}. In comparison to simulation~\ref{fig:allStates} results are as expected. The arm angle $\alpha$ oscillates a little less then expected. We observe a steady state offset that we did not see in our simulations, however this offset is within one or two degrees. Given that we have a small systematic error due to the potentiometer calibration that we did not fix completely this offset seems reasonable. We also applied a sinusoidal reference input. Tracking results are shown in figure\ref{fig:allStates} on the right side. In comparison to the reference sine, which has an amplitude of $45^\circ$ our system output is damped. However in the beginning we stated that apart from good tracking results we also want our controller to keep the arm angle $\alpha$ as close to zero as possible. Again we are facing a conflicting control objectives. We cannot perfectly track the hub angle $\theta$ and keep the arm angle $\alpha$ close to zero. In our experiment the arm angle $\alpha$ remained within $2$ and $-2$ degrees at all times. If we tuned more towards tracking we would loose performance here. So we are proposing this controller as a compromise. 
 
 
 \end{document}
