@@ -24,8 +24,8 @@
 \begin{tikzpicture}
 
 \begin{axis}[%
-width=4.44010416666667in,
-height=1.47171706442055in,
+width=1.8in,
+height=1in,
 scale only axis,
 separate axis lines,
 every outer x axis line/.append style={white!15!black},
@@ -37,8 +37,8 @@ every y tick label/.append style={font=\color{white!15!black}},
 ymin=-0.2,
 ymax=0.8,
 name=plot1,
-title style={font=\bfseries},
-title={plant output and reference signals}
+%title style={font=\bfseries},
+%title={plant output and reference signals}
 ]
 \addplot [color=mycolor1,solid,forget plot]
   table[row sep=crcr]{0	0\\
@@ -3052,22 +3052,21 @@ title={plant output and reference signals}
 \end{axis}
 
 \begin{axis}[%
-width=4.44010416666667in,
-height=1.47171706442055in,
+width=1.8in,
+height=1in,
 scale only axis,
 separate axis lines,
 every outer x axis line/.append style={white!15!black},
 every x tick label/.append style={font=\color{white!15!black}},
 xmin=0,
 xmax=5,
+xlabel={time [s]},
 every outer y axis line/.append style={white!15!black},
 every y tick label/.append style={font=\color{white!15!black}},
 ymin=0,
 ymax=4,
 at=(plot1.below south west),
 anchor=above north west,
-title style={font=\bfseries},
-title={plant input}
 ]
 \addplot [color=mycolor1,solid,forget plot]
   table[row sep=crcr]{0	0\\

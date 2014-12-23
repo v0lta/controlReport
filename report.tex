@@ -111,10 +111,11 @@ With the input weight $R = 30$. We increased the weight on the inputs to prevent
 
 
 \begin{figure}
-%\input{images/orgFullState.tex}
-\includegraphics[scale=0.46]{images/orgFullState.pdf}
-\includegraphics[scale=0.46]{images/optFullState.pdf}
-\caption{Simulation results for the original weighting parameters left and for the improved weighting parameters right. Plant input is given in Volt [V]. Plant output and references are given in radians [rad].}
+\input{images/orgFullState.tex}
+\input{images/optFullState.tex}
+%\includegraphics[scale=0.46]{images/orgFullState.pdf}
+%\includegraphics[scale=0.46]{images/optFullState.pdf}
+\caption{Simulation results for the original weighting parameters left and for the improved weighting parameters right.}
 \label{fig:stepResponse}
 \end{figure}
 
@@ -143,18 +144,16 @@ The "Analog Output" block allows the controller to send a voltage signal to the 
 \section{Setpoint tracking}
 \begin{figure}
 %If time later use these and adjust size in .tex file.
-%\input{images/optimizedStepLab.tex}
-%\input{images/optimizedSineLab.tex}
-\includegraphics[scale = 0.46]{images/optimizedStepLab.pdf}
-\includegraphics[scale = 0.46]{images/optimizedSineLab.pdf}
-\caption{Setpoint tracking test results. References and plant outputs are given in degree [$\;^\circ$]. Plant input voltages are given in volts [V].}
+\input{images/optimizedStepLab.tex}
+\input{images/optimizedSineLab.tex}
+\caption{Setpoint tracking test results.}
 \label{fig:setPoint}
 \end{figure}
 Using the controller we tuned during the simulation of our plant we started our experiments with some simple reference tracking experiments.\marginpar{Recall that we had the tuned controller: Q = diag([500 1000 3 10]) with R = 30.} The results are shown in figure~\ref{fig:setPoint}. In comparison to simulation~\ref{fig:allStates} results are as expected. The arm angle $\alpha$ oscillates a little less then expected. We observe a steady state offset that we did not see in our simulations, however this offset is within one or two degrees. Given that we have a small systematic error due to the potentiometer calibration that we did not fix completely this offset seems reasonable. We also applied a sinusoidal reference input. Tracking results are shown in figure~\ref{fig:allStates} on the right side. In comparison to the reference sine, which has an amplitude of $45^\circ$ our system output is damped. However in the beginning we stated that apart from good tracking results we also want our controller to keep the arm angle $\alpha$ as close to zero as possible. Again we are facing a conflicting control objectives. We cannot perfectly track the hub angle $\theta$ and keep the arm angle $\alpha$ close to zero. In our experiment the arm angle $\alpha$ remained within $2$ and $-2$ degrees at all times. If we tuned more towards tracking we would loose performance here. So we are proposing this controller as a compromise. 
 
 \section{Disturbance Rejection}
 \begin{figure}
-\includegraphics[scale = 0.65]{images/disturbance.pdf}
+\input{images/disturbance.tex}
 \caption{Plant and controller reaction to an external disturbance.}
 \label{fig:disturbance}
 \end{figure}
@@ -173,7 +172,7 @@ In this section we are going to present our measurement of the closed loop frequ
  
 The bode plots we computed from the identified transfer functions are provided in~\ref{fig:frequencyDomain}. The magnitude plot depicts very accurately what we saw when measuring the frequency response \footnote{A video of the plant during this measurement is also available at: \url{http://youtu.be/b4xiNnIXjxU}. When watching the video keep in mind that the frequency is a function of time. The video shows a bode plot in the making.}. At low frequencies the hub can track the reference signal very accurately, the magnitude plot is basically zero. This situation changes dramatically for higher frequencies when it becomes harder to track the signal. Now the hub fails to reach the peak of the sine input in time and has to start moving into the reverse direction early. This leads to a decrease in the magnitude of the output wave, which is depicted in the bode plot by the falling magnitude line for  higher frequencies. However theta has one resonance frequency during the measurement we could actually hear the plant oscillating. This is why the transfer function has a complex pole pair at approximately 10 Herz. 
 When looking at the bode plot for alpha it is important to note, that this is the plot of the transfer function from the theta input to the alpha output. It is important to choose this function, as the alpha reference is zero at all times. During low frequency excitation the arm does not move when observed from the hub, leading to a zero output. This desired good tracking performance translates into extreme damping in relation to the theta input signal. In the magnitude plot of figure~\ref{fig:frequencyDomain} this explains the very low values for the orange line at low frequencies. However with increasing frequencies we also rising oscillations of the arm in relation to the hub. In the time domain plot in figure~\ref{fig:timeDomain} we observe to resonance peaks at high frequencies, with arm oscillation in between. In the bode plot the orange line rises in the area corresponding to the sine frequency at that time. 
-The quality of the phase plot is not as good as the magnitude plot. What happens in reality for both plant output angles is that they fall behind the input farther and farther for higher frequencies as the plant fails to keep up with the input. For the blue line the phase angle plot works up until 10 Herz. The plot remains constant in the beginning as the plant tracks the input properly. And it falls when we are reaching higher frequencies. However frequencies higher then 25 Herz where not applied during our experiment. From the bode plot we would predict, that when the plant damps the input waves it becomes able to track them again. However the prediction remains speculative.   
+The quality of the phase plot is not as good as the magnitude plot. What happens in reality for both plant output angles is that they fall behind the input farther and farther for higher frequencies as the plant fails to keep up with the input. For the blue line the phase angle plot works up until 10 Herz. The plot remains constant in the beginning as the plant tracks the input properly. And it falls when we are reaching higher frequencies. However frequencies higher then 25 Herz where not applied during our experiment. From the bode plot we would predict, that when the plant damps the input waves it becomes able to track them again at a constant delay. However this prediction remains speculative.   
 
 \begin{figure}
 \includegraphics[scale = 0.5]{images/input.png}

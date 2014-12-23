@@ -24,8 +24,8 @@
 \begin{tikzpicture}
 
 \begin{axis}[%
-width=4.52083333333333in,
-height=1.49022845007946in,
+width=2in,
+height=1in,
 scale only axis,
 separate axis lines,
 every outer x axis line/.append style={white!15!black},
@@ -39,8 +39,8 @@ ymin=-50,
 ymax=50,
 ymajorgrids,
 name=plot1,
-title style={font=\bfseries},
-title={reference and plant output}
+%ylabel={reference, plant [$\;^\circ$]},
+title style={font=\bfseries}
 ]
 \addplot [color=mycolor1,solid,forget plot]
   table[row sep=crcr]{0	0.842477547618955\\
@@ -4485,8 +4485,8 @@ title={reference and plant output}
 \end{axis}
 
 \begin{axis}[%
-width=4.52083333333333in,
-height=1.49022845007946in,
+width=2in,
+height=1in,
 scale only axis,
 separate axis lines,
 every outer x axis line/.append style={white!15!black},
@@ -4494,15 +4494,15 @@ every x tick label/.append style={font=\color{white!15!black}},
 xmin=0,
 xmax=8,
 xmajorgrids,
+xlabel={time [s]},
 every outer y axis line/.append style={white!15!black},
 every y tick label/.append style={font=\color{white!15!black}},
 ymin=-2,
 ymax=2,
 ymajorgrids,
 at=(plot1.below south west),
-anchor=above north west,
-title style={font=\bfseries},
-title={plant input Voltage}
+%ylabel={input Voltage [V]},
+anchor=above north west
 ]
 \addplot [color=blue,solid,forget plot]
   table[row sep=crcr]{0	-0.0987352374029043\\

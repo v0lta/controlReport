@@ -24,8 +24,8 @@
 \begin{tikzpicture}
 
 \begin{axis}[%
-width=4.52083333333333in,
-height=1.49022845007946in,
+width=4in,
+height=1in,
 scale only axis,
 separate axis lines,
 every outer x axis line/.append style={white!15!black},
@@ -37,6 +37,7 @@ every outer y axis line/.append style={white!15!black},
 every y tick label/.append style={font=\color{white!15!black}},
 ymin=-15,
 ymax=5,
+ylabel={output [$\;^\circ$]},
 ymajorgrids,
 name=plot1,
 title style={font=\bfseries},
@@ -3777,14 +3778,15 @@ title={reference and plant output}
 \end{axis}
 
 \begin{axis}[%
-width=4.52083333333333in,
-height=1.49022845007946in,
+width=4in,
+height=1in,
 scale only axis,
 separate axis lines,
 every outer x axis line/.append style={white!15!black},
 every x tick label/.append style={font=\color{white!15!black}},
 xmin=0,
 xmax=7,
+xlabel={time [s]},
 xmajorgrids,
 every outer y axis line/.append style={white!15!black},
 every y tick label/.append style={font=\color{white!15!black}},
@@ -3794,7 +3796,7 @@ ymajorgrids,
 at=(plot1.below south west),
 anchor=above north west,
 title style={font=\bfseries},
-title={plant input Voltage}
+ylabel={input Voltage [V]}
 ]
 \addplot [color=blue,solid,forget plot]
   table[row sep=crcr]{0	0.275088641207231\\
