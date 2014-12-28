@@ -124,6 +124,41 @@ With the input weight $R = 30$. We increased the weight on the inputs to prevent
 \begin{figure}
 \includegraphics[scale=0.5]{images/simModel.pdf}
 \caption{The simulink Layout of our Simulation}
+\label{fig:notallStates}
+\end{figure}
+
+In order to have a more realistic simulation, you have to create a Simulink diagram where the outputs of the linear model are the variables that are measured in the real setup ($\theta$ and $\alpha$). So from now on we change back to the state-space model with the matrix $A$,$B$,$C$ and $D$ described in chapter one. Because we want to apply state feedback, we need the know the state vector. Therefore in order to derive the entire state vector, we will compute the derivatives of the measured outputs by using the backward difference equation and a low pass filter. To use the backward difference technique, it's necessary to low-pass filter the raw measurements before calculating the difference, because these are very fluctuation- and noise-sensitive. The low pass filter we will use obeys the following law:
+
+\begin{equation} \label{filter_equation}
+y_n^f = \frac{\omega_c T_s}{1 + \omega_c T_s} y_n + \frac{1}{1 + \omega_c T_s} y_{n-1}^f
+\end{equation}
+ 
+where we take the cut-off frequency $\omega_c = 4 \pi$ rad/s. $y_n^f$ is the filtered signal. The states $\dot{\theta}$ and $\dot{\alpha}$ are then calculated using the following backward difference equation:
+
+\begin{equation} \label{backward}
+\dot{y} = \frac{y^f(t) - y^f(t - T_s)}{T_s}
+\end{equation}
+
+in Figure~\ref{fig:notallStates} we see the Simulink diagram where differentiator and filter are added. They are implemented in such a way that the equalities $\eqref{filter_equation}$ and $\eqref{backward}$ are fulfilled. We added a saturation block such that the input voltage is limited between $-5V$ and $5V$. Also a quantizer is added with a quantization interval of length $1e-6$. To approximate the reality as much as possible, we also included a white noise source with a noise power of $10^{-4}$. In figure $\eqref{fig:sim_results1}$ we applied the same step change as in figure~{\ref{fig:stepResponse} but simulated with the simulink diagram from figure~\ref{fig:notallStates}. We see that the results are similar but the effects of the noise source are visible. This is the way it will always be in reality.
+
+\begin{figure}
+\includegraphics[scale=0.5]{images/sim_results1}
+\caption{Simulation results with the simulink diagram from Figure~\ref{fig:notallStates}. The yellow line is the reference signal for $\theta$, the blue line is the value of $\theta$ and the red line is de value of $\alpha$. }
+\label{fig:sim_results1}
+\end{figure}
+
+We will now investigate the role of the cut-off frequency of the low-pass filters. In figure $\eqref{fig:sim_results2}$ we see the step response as before but now we increased the cut-off frequency to $\omega_c = 10 \pi$. We notice that when the cut-off frequency is to large, to much high frequency noise goes into the system are hence we get really noisy results. We will now investigate the effect when we decrease the cut-off frequency. In figure $\eqref{fig:sim_results3}$ we see the step response with a cut-off frequency $\omega_c = \pi$. In this case we see that we get overshoot and slow convergence to the step reference. Although there is no noise, we also don't want overshoot and slow convergence. So we see that it is important to pick the right cut-off frequency.
+
+\begin{figure}
+\includegraphics[scale=0.5]{images/sim_results2}
+\caption{Simulation results with the simulink diagram from Figure~\ref{fig:notallStates}. The yellow line is the reference signal for $\theta$, the blue line is the value of $\theta$ and the red line is de value of $\alpha$. The cut-off frequency of the low pass filter is set to $\omega_c = 10\pi$. }
+\label{fig:sim_results2}
+\end{figure}
+
+\begin{figure}
+\includegraphics[scale=0.5]{images/sim_results3}
+\caption{Simulation results with the simulink diagram from Figure~\ref{fig:notallStates}. The yellow line is the reference signal for $\theta$, the blue line is the value of $\theta$ and the red line is de value of $\alpha$. The cut-off frequency of the low pass filter is set to $\omega_c = \pi$. }
+\label{fig:sim_results3}
 \end{figure}
 
 
@@ -196,6 +231,7 @@ The first thing we noticed when removing the filter, was the we could hear the n
 \end{figure}
 
 \chapter{Conclusion}
-\textbf{TODO!!!!}
+
+We conclude from this project that our controllers work good enough to control the rotary flexible joint in reality. But we have also noticed that the our controllers are not the same in simulation as in a lab. If you need to design a controller for real applications, you have to take into account so much more things such as saturation, quantization, noise, ... . We also realized that we can use a continuous model even when in reality it will be executed in a discrete way. As long as the sampling time is small enough it wont cause any problems.
 
 \end{document}
